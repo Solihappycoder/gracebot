@@ -40,9 +40,9 @@ async def on_ready():
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.get(API_URL) as resp:
-                if resp.status != 200:
-                    await ctx.respond(f"Failed to fetch data from API. Status code: {resp.status}")
-                    return
+                    if resp.status != 200:
+                        await ctx.respond(f"Failed to fetch data from API. Status code: {resp.status}")
+                        return
                 data = await resp.json()
                 stats = data["result"]["data"]["json"]
                 pending = stats["pendingCount"]
