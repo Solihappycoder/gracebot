@@ -8,5 +8,5 @@ services:
     env_file:
       - .env
     environment:
-      - DISCORD_TOKEN: ${DISCORD_TOKEN}
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
       - PYTHONUNBUFFERED=1
