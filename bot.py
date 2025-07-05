@@ -41,9 +41,8 @@ async def on_ready():
             async with aiohttp.ClientSession() as session:
                 async with session.get(API_URL) as resp:
                     data = await resp.json()
-                    stats = data["result"]["data"]["json"]
-                    pending = stats["pendingCount"]
-                    print(pending)
+                    pending = data[0]["result"]["data"]["json"]["pendingCount"]
+
             
             channel = await client.fetch_channel(config["channel_id"])
             msg = await channel.send(generate_status_message())
