@@ -1,0 +1,5 @@
+{
+  "token": "${DISCORD_TOKEN}",
+  "channel_id": 1175829198909231225,
+  "message_id": 0
+}
