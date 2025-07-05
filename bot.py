@@ -1,12 +1,13 @@
-import discord
 import aiohttp
 import asyncio
 import json
 import re
 import os
+from discord.ext import commands
+import discord
 
 intents = discord.Intents.default()
-client = discord.Bot(intents=intents)
+client = commands.Bot(command_prefix="!", intents=intents)
 
 CONFIG_FILE = "config.json"
 
