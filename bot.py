@@ -40,7 +40,7 @@ async def on_ready():
     if config["message_id"] == 0:
         try:
             channel = await client.fetch_channel(config["channel_id"])
-            msg = await channel.send(generate_status_message(pending))
+            msg = await channel.send(generate_status_message())
             config["message_id"] = msg.id
             save_config()
             print(f"Status message created and saved with ID {msg.id}")
