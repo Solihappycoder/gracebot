@@ -45,13 +45,10 @@ if config["message_id"] == 0:
                 data = await resp.json()
 
         stats = data[0]["result"]["data"]["json"]
-        total = stats["totalCount"]
-        accepted = stats["acceptedCount"]
         pending = stats["pendingCount"]
-        denied = stats["deniedCount"]
-
+        
         channel = await client.fetch_channel(config["channel_id"])
-        msg = await channel.send(generate_status_message(total, accepted, pending, denied))
+        msg = await channel.send(generate_status_message(pending))
         config["message_id"] = msg.id
         save_config()
         print(f"Status message created and saved with ID {msg.id}")
