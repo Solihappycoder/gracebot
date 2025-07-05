@@ -33,6 +33,8 @@ TEAM_MAPPING = {
 async def on_ready():
     print(f"Logged in as {client.user}")
 
+    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Grace Applications"))
+
     # Auto-create message if message_id is missing or zero
     if config["message_id"] == 0:
         try:
