@@ -50,7 +50,7 @@ def save_config():
     with open(CONFIG_FILE, "w") as f:
         json.dump(config, f, indent=2)
 
-def generate_status_message(total=0, accepted=0, pending=0, denied=0):
+def generate_status_message(pending):
     return (
         "**# <:gracechurch:1175897908965540010> | Volunteer Applications Are Open!**\n"
         "__Grace Church is *For Young People, **By Young People.***__\n\n"
@@ -85,12 +85,11 @@ async def update_status(ctx):
                 data = await resp.json()
 
         stats = data["result"]["data"]["json"]
-        total = stats["totalCount"]
-        accepted = stats["acceptedCount"]
         pending = stats["pendingCount"]
-        denied = stats["deniedCount"]
 
-        status_message = generate_status_message(total, accepted, pending, denied)
+        print(pending)
+        
+        status_message = generate_status_message(pending)
 
         channel = await client.fetch_channel(config["channel_id"])
         message = await channel.fetch_message(config["message_id"])
