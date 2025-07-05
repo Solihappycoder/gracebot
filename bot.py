@@ -38,7 +38,6 @@ async def on_ready():
     # Auto-create message if message_id is missing or zero
     if config["message_id"] == 0:
         try:
-                try:
         async with aiohttp.ClientSession() as session:
             async with session.get(API_URL) as resp:
                 if resp.status != 200:
