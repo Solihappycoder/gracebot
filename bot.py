@@ -38,6 +38,7 @@ async def on_ready():
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Grace Applications"))
     # Auto-create message if message_id is missing or zero
     if config["message_id"] == 0:
+        try:
             channel = await client.fetch_channel(config["channel_id"])
             msg = await channel.send(generate_status_message(pending))
             config["message_id"] = msg.id
