@@ -17,10 +17,11 @@ with open(CONFIG_FILE) as f:
 API_URL = "https://appy.bot/api/trpc/applicationSubmissions.statistics,applicationSubmissions.getPaginated?batch=1&input=%7B%220%22%3A%7B%22json%22%3A%7B%22guildId%22%3A%22711269728097927259%22%7D%7D%2C%221%22%3A%7B%22json%22%3A%7B%22guildId%22%3A%22711269728097927259%22%2C%22status%22%3A%22ALL%22%2C%22limit%22%3A20%2C%22page%22%3A1%7D%7D%7D"
 
 TEAM_MAPPING = {
-    "worship": "<@&711298940292825108>",
-    "lighting": "<@&711298903730814997>",
-    "media": "<@&806674959141175327>",
-    "pastoral": "<@&982032570856407090>"
+    "GE": "<@&798708370298372116>",
+    "Worship": "<@&711298940292825108>",
+    "Production": "<@&711298903730814997>",
+    "Media": "<@&806674959141175327>",
+    "Pastoral": "<@&982032570856407090>",
 }
 
 @client.event
@@ -47,6 +48,9 @@ def generate_status_message(total=0, accepted=0, pending=0, denied=0):
         "**# <:gracechurch:1175897908965540010> | Volunteer Applications Are Open!**\n"
         "__Grace Church is *For Young People, **By Young People.***__\n\n"
         "If you're interested in serving as part of our ministry as a volunteer, this is the place to do it! We're looking for folks who love Jesus and want to use their God-given gifts and talents to help all in Grace Church to Know and Grow as they themselves Serve!\n\n"
+
+        f"Current Pending Applications: `{pending}`\n"
+        
         "# Our Volunteer Teams:\n"
         "<@&798708370298372116> **Guest Experience -** Provides hospitality and support by welcoming guests, answering questions, and fostering a warm, family-like atmosphere within the church community.\n\n"
         "<@&711298940292825108> - Leads the congregation in musical worship, committing to rehearsals and spiritual connection through song before, during, and after services.\n\n"
@@ -55,11 +59,6 @@ def generate_status_message(total=0, accepted=0, pending=0, denied=0):
         "<@&982032570856407090> - Serves as spiritual leaders and counselors, focusing on teaching, outreach, and guiding members and guests in their walk with God.\n\n"
         "# ---------------\n"
         "Volunteer teams are led by various <@&715619118769766521> who serve by helping others serve!\n\n"
-        f"📊 **Application Stats:**\n"
-        f"✅ Accepted: `{accepted}`\n"
-        f"⏳ Pending: `{pending}`\n"
-        f"❌ Denied: `{denied}`\n"
-        f"📄 Total Applications: `{total}`\n\n"
         "1. If you'd like to apply, you can do so below!\n"
         "2. Please be patient, as we take our time to review all applications personally.\n"
         "3. If your application is not accepted, please wait to reapply the following week.\n"
@@ -123,4 +122,4 @@ async def toggle_full(ctx, team: discord.Option(str, "Select the team", choices=
         print(f"Error: {e}")
         await ctx.respond("An error occurred while toggling [FULL].")
 
-client.run(config["token"])
+client.run(os.environ.get("DISCORD_TOKEN"))
