@@ -35,26 +35,24 @@ async def on_ready():
 
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Grace Applications"))
     # Auto-create message if message_id is missing or zero
-if config["message_id"] == 0:
-    try:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(API_URL) as resp:
-                if resp.status != 200:
-                    print(f"Failed to fetch data from API. Status code: {resp.status}")
-                    return
-                data = await resp.json()
-
-        stats = data[0]["result"]["data"]["json"]
-        pending = stats["pendingCount"]
-        
-        channel = await client.fetch_channel(config["channel_id"])
-        msg = await channel.send(generate_status_message(pending))
-        config["message_id"] = msg.id
-        save_config()
-        print(f"Status message created and saved with ID {msg.id}")
-
-    except Exception as e:
-        print(f"Failed to create status message: {e}")
+    if config["message_id"] == 0:
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(API_URL) as resp:
+                    if resp.status != 200:
+                        print(f"Failed to fetch data from API. Status code: {resp.status}")
+                        return
+                        
+            data = await resp.json()
+            stats = data[0]["result"]["data"]["json"]
+            pending = stats["pendingCount"]
+            channel = await client.fetch_channel(config["channel_id"])
+            msg = await channel.send(generate_status_message(pending))
+            config["message_id"] = msg.id
+            save_config()
+            print(f"Status message created and saved with ID {msg.id}")
+        except Exception as e:
+            print(f"Failed to create status message: {e}")
 
 
 def save_config():
