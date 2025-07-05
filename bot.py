@@ -6,6 +6,11 @@ import os
 from discord.ext import commands
 import discord
 
+token = os.environ.get("DISCORD_TOKEN")
+
+if token is None:
+    raise ValueError("DISCORD_TOKEN environment variable is not set.")
+
 intents = discord.Intents.default()
 client = commands.Bot(command_prefix="!", intents=intents)
 
@@ -122,4 +127,4 @@ async def toggle_full(ctx, team: discord.Option(str, "Select the team", choices=
         print(f"Error: {e}")
         await ctx.respond("An error occurred while toggling [FULL].")
 
-client.run(os.environ.get("DISCORD_TOKEN"))
+client.run(token)
