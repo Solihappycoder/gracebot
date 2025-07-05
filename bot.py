@@ -6,6 +6,8 @@ import os
 from discord.ext import commands
 import discord
 
+pending = 50
+
 token = os.environ.get("DISCORD_TOKEN")
 
 if token is None:
@@ -36,16 +38,6 @@ async def on_ready():
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Grace Applications"))
     # Auto-create message if message_id is missing or zero
     if config["message_id"] == 0:
-        try:
-            async with aiohttp.ClientSession() as session:
-                async with session.get(API_URL) as resp:
-                    if resp.status != 200:
-                        print(f"Failed to fetch data from API. Status code: {resp.status}")
-                        return
-                        
-            data = await resp.json()
-            stats = data[0]["result"]["data"]["json"]
-            pending = stats["pendingCount"]
             channel = await client.fetch_channel(config["channel_id"])
             msg = await channel.send(generate_status_message(pending))
             config["message_id"] = msg.id
@@ -59,7 +51,7 @@ def save_config():
     with open(CONFIG_FILE, "w") as f:
         json.dump(config, f, indent=2)
 
-def generate_status_message(pending):
+def generate_status_message():
     return (
         "**# <:gracechurch:1175897908965540010> | Volunteer Applications Are Open!**\n"
         "__Grace Church is *For Young People, **By Young People.***__\n\n"
@@ -81,35 +73,6 @@ def generate_status_message(pending):
         "4. Please write your application yourself, and do not copy directly from AI."
     )
 
-@client.slash_command(description="Update the volunteer application status message.")
-async def update_status(ctx):
-    await ctx.defer()
-
-    try:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(API_URL) as resp:
-                if resp.status != 200:
-                    await ctx.respond(f"Failed to fetch data from API. Status code: {resp.status}")
-                    return
-                data = await resp.json()
-
-        stats = data["result"]["data"]["json"]
-        pending = stats["pendingCount"]
-
-        print(pending)
-        
-        status_message = generate_status_message(pending)
-
-        channel = await client.fetch_channel(config["channel_id"])
-        message = await channel.fetch_message(config["message_id"])
-        await message.edit(content=status_message)
-
-        await ctx.respond("Volunteer status message updated successfully.")
-
-    except Exception as e:
-        print(f"Error: {e}")
-        await ctx.respond("An error occurred while updating the status.")
-
 @client.slash_command(description="Toggle [FULL] tag for a volunteer team.")
 async def toggle_full(ctx, team: discord.Option(str, "Select the team", choices=list(TEAM_MAPPING.keys()))):
     await ctx.defer()
@@ -118,7 +81,7 @@ async def toggle_full(ctx, team: discord.Option(str, "Select the team", choices=
         channel = await client.fetch_channel(config["channel_id"])
         message = await channel.fetch_message(config["message_id"])
         content = message.content
-
+        
         team_mention = TEAM_MAPPING[team]
 
         full_pattern = rf"\*\*\[FULL\]\*\*\s{re.escape(team_mention)}"
@@ -136,5 +99,27 @@ async def toggle_full(ctx, team: discord.Option(str, "Select the team", choices=
     except Exception as e:
         print(f"Error: {e}")
         await ctx.respond("An error occurred while toggling [FULL].")
+
+@client.slash_command(description="Manually set the pending applications number.")
+async def setpending(ctx, pending: int):
+    await ctx.defer()
+
+    pending = pending
+
+    try:
+        channel = await client.fetch_channel(config["channel_id"])
+        message = await channel.fetch_message(config["message_id"])
+
+        content = message.content
+
+        # Use regex to replace the pending count safely
+        new_content = re.sub(r"(Current Pending Applications: `)(\d+)(`)", rf"\g<1>{pending}\g<3>", content)
+
+        await message.edit(content=new_content)
+        await ctx.respond(f"Pending count updated to `{pending}`.")
+
+    except Exception as e:
+        print(f"Error: {e}")
+        await ctx.respond("An error occurred while updating the pending count.")
 
 client.run(token)
