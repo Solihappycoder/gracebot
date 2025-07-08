@@ -64,7 +64,7 @@ def generate_status_message():
         "# Our Volunteer Teams:\n"
         "<@&798708370298372116> **Guest Experience -** Provides hospitality and support by welcoming guests, answering questions, and fostering a warm, family-like atmosphere within the church community.\n\n"
         "<@&711298940292825108> - Leads the congregation in musical worship, committing to rehearsals and spiritual connection through song before, during, and after services.\n\n"
-        "<@&1391610339568914463> - Passionate about music and worship? Join us and help create an atmosphere of praise and energy during our services."
+        "<@&1391610339568914463> - Passionate about music and worship? Join us and help create an atmosphere of praise and energy during our services.\n\n"
         "<@&711298903730814997> - Manages in-game stage lighting during services, ensuring smooth worship and sermon experiences through teamwork and communication.\n\n"
         "<@&806674959141175327> - Captures and creates media content for Grace Media, using creativity and collaboration to support ministry projects both in and out of the game.\n\n"
         "<@&982032570856407090> - Serves as spiritual leaders and counselors, focusing on teaching, outreach, and guiding members and guests in their walk with God.\n\n"
